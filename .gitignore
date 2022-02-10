@@ -1,1 +1,3 @@
 *.txt
+src/MakeInput
+*.inp
