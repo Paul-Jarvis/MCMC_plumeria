@@ -49,9 +49,36 @@ Running these simulations requires a compiled executable of plumeria_wd.  It has
   gfortran -o MakeInput MakeInput.f90
   ./MakeInput 00001
      --This should 
-        --cate a new input file in the current directory, and write out a line of inputs to sdout.  Verify that they agree with the inputs specified for run #1.
+        --create a new input file in the current directory, and
+        --write out a line of inputs to sdout.  
+     --Verify that they agree with the inputs specified for run #1.
 
-###############################  4. Modify MakeInput.f90 to read from the new summary file  ##########################
-
+4. Modify MCMC_plumeria.sh to read and write to the correct directories
+  vi MCMC_plumeria.sh
+     --Modify Lines 31-46 to ensure that directory names are correct for:
+        PLUMEPROG   #the name and location of the executable plume_wd
+        MAINDIR     #should be the same as ${MAINDIR}
+        OUTPUTDIR   #The directory that will contain model output
+        MAKEINPUTPROG #the name & location of the MakeInput executable
+        OUTPUTREADER  #the name & location of read_output.py
+        OUTFILENAME   #the name of output files created by plume_wd (should agree with the name listed in the input file)
+        
+5.  Test the script
+  --Lines 25-27 of MCMC_plumeria.sh give the run start number, the number of directories where
+    runs will be made simultaneously (dirmax), and the number of cycles of runs (cyclemax).  The
+    total number runs equals dirmax*(cyclemax-1), because dirmax counts starts counting at 1, and
+    cyclemax starts counting at zero.  To test the model, set dirmax=1, cyclemax=0.
+  --Review the checklist on lines 7-15.
+  --Try a test run
+  ./MCMC_plumeria.sh
+  --Verify that output files are correctly written by
+  --Modify lines 26-27 of MCMC_plumeria.sh for the appropriate dirmax and cyclemax
+  --Run the model:
+  ./MCMC_plumeria.sh
+  
+If the script runs without error, you should see output files and run logs in ${OUTPUTDIR}/output_files and
+${OUTPUTDIR}/run_logs respectively, and a summary table in ${OUTPUTDRI}/summary_table.
+        
+        
 
 
