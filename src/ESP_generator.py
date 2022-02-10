@@ -8,11 +8,11 @@ import math
 ## Inputs
 pi                  = 3.14159               #pi
 nruns               = 500                   #number of runs to set parameters for
-vent_elevation      = 144.0                 #vent elevation, km
-logMER_min          = 6.                    #minimum log MER (kg/s)
+vent_elevation      = 0.0                 #vent elevation, km
+logMER_min          = 6.0                    #minimum log MER (kg/s)
 logMER_max          = 10.5                  #maximum log MER (kg/s)
-u_min               = 100.                  #minimum ejection velocity (m/s)
-u_max               = 350.                  #maximum ejection velocity (m/s)
+u_min               = 100.0                  #minimum ejection velocity (m/s)
+u_max               = 350.0                  #maximum ejection velocity (m/s)
 
 #Parameters that need to change if we're adjusting mass fraction water
 #Use this guide for the density of erupting mixture, assuming T=900 C, m_g=0.03, vent elevation=144 m
@@ -55,13 +55,13 @@ print('INPUT VALUES USED IN HTHH PLUMERIA RUNS. T={:5.1f}, m_w={:4.2f}, m_g={:4.
 #        12345678901234567890123456789012345678901234567890123456789012345678901234567890
 f.write('run #         MER         diam     u_exit     T_m     m_w     m_g     rho_mix\n')
 f.write('             kg/s           m        m/s       C                        kg/m3\n')
-print   'run #         MER         diam     u_exit     T_m     m_w     m_g     rho_mix'
-print   '             kg/s           m        m/s       C                        kg/m3'
+print(   'run #         MER         diam     u_exit     T_m     m_w     m_g     rho_mix')
+print(   '             kg/s           m        m/s       C                        kg/m3')
 for irun in range(0,nruns-1):
     f.write('{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}\n'. \
             format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix))
-    print '{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}'. \
-            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix)
+    print( '{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}'. \
+            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix))
     #    print('%5d   %12.4e%10.0f%11.1f    %4.0f    %4.2f    %4.2f   %5.3f' \
     #           % (irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix)
 f.close()
