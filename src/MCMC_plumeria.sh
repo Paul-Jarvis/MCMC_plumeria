@@ -29,19 +29,19 @@ cyclemax=9           #Number of cycles (0 to ????)
 #####Directories of programs and utilities
 
 PLUMEPROG="/data1/lgmastin/Fortran_codes/plumeria_wd/plume_wd"       #name and location of plumeria executable
-UTILDIR="/data1/lgmastin/plumes/HungaTonga/MCMC"                     #name and location of other utility programs
-METFILE="${UTILDIR}/scripts/input_files/gfs_sounding.txt"            #name and location of met. file
-MAKEINPUTPROG="${UTILDIR}/scripts/src/MakeInput"                     #name and location of MakeInput file
-OUTPUTREADER="${UTILDIR}/scripts/src/read_output.py"                 #name and location of python script that reads output
+MAINDIR="/data1/lgmastin/plumes/HungaTonga/MCMC"                     #name and location of other utility programs
+METFILE="${MAINDIR}/scripts/input_files/gfs_sounding.txt"            #name and location of met. file
+MAKEINPUTPROG="${MAINDIR}/scripts/src/MakeInput"                     #name and location of MakeInput file
+OUTPUTREADER="${MAINDIR}/scripts/src/read_output.py"                 #name and location of python script that reads output
 OUTFILENAME="output_file.txt"                                        #name of output file created by plumeria (must agree with
                                                                      #      the name given in the plumeria input file
 LOGFILENAME="run_log.txt"                                            #name of log file, when plumeria is run in background
 
 #####Run and Output directories
 FileDate=`date "+%Y%b%d"`                                               #date, to be appended to file names
-RUNDIRS=/data1/lgmastin/plumes/HungaTonga/MCMC/RunDirs                  #location of directories where program will be run
-OUTPUTDIR=/data1/lgmastin/plumes/HungaTonga/MCMC/run_output/H2O0.20_mg0.03     #location of output file directory
+RUNDIRS=${MAINDIR}/RunDirs                  #location of directories where program will be run
 OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
+OUTPUTDIR=${OUTFILEDIR}/H2O0.20_mg0.03     #location of output file directory
 OUTLOGDIR=${OUTPUTDIR}/run_logs
 SUMMARYTABLEDIR=${OUTPUTDIR}/summary_table
 SUMMARYTABLE=${OUTPUTDIR}/summary_table/summary_table.txt
