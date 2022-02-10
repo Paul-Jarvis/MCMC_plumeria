@@ -23,7 +23,7 @@
 #Total number of runs performed = dirmax*(cyclemax+1)
 #Runs are numbered from RunStartNumber to (RunStartNumber + dirmax*(cyclemax+1))
 RunStartNumber=1     #Run number for first run in the series
-dirmax=20            #Number of simultaneous runs (1 to 50)
+dirmax=1            #Number of simultaneous runs (1 to 50)
 cyclemax=9           #Number of cycles (0 to ????)
 
 #####Directories of programs and utilities
@@ -44,7 +44,7 @@ RUNDIRS=${MAINDIR}/RunDirs                  #location of directories where progr
 ## NOTE FROM PAUL - HAVE REPLACED COMMENTED LINES WITH EDITS BELOW
 #OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 #OUTPUTDIR=${OUTFILEDIR}/H2O0.20_mg0.03     #location of output file directory
-OUTPUTDIR=${MAINDIR}/run_output
+OUTPUTDIR=${MAINDIR}/run_output/H2O0.20_mg0.03
 OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 
 OUTLOGDIR=${OUTPUTDIR}/run_logs
@@ -218,7 +218,7 @@ for (( icycle=0;icycle<=$cyclemax;icycle++ )); do
 
          #read output and write to summary table
          echo "Reading output, writing to summary table"
-         python ${OUTPUTREADER} ${RunNumber} ${SUMMARYTABLE}
+         python3.6 ${OUTPUTREADER} ${RunNumber} ${SUMMARYTABLE}
 
          #move the log & output files
          cp -f ${LOGFILENAME} ${OUTLOGDIR}/Run${RunNumber}.txt

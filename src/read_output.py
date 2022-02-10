@@ -79,7 +79,7 @@ f.close()
 #print 'vent_elevation = {:6.1f}'.format(vent_elevation)
 
 #print to output file
-print 'Printing to output file'
+print('Printing to output file')
 
 with open(output_summaryfile,"a") as f2:
 	f2.write('{:05d}     {:12.4e}{:8.1f}{:10.1f}  {:7.2f}{:7.2f}{:7.1f}{:10.2f}{:15.1f}{:19.4e}{:9.3f}{:11.3f}{:14.4e}\n' \
