@@ -23,14 +23,15 @@
 #Total number of runs performed = dirmax*(cyclemax+1)
 #Runs are numbered from RunStartNumber to (RunStartNumber + dirmax*(cyclemax+1))
 RunStartNumber=1     #Run number for first run in the series
-dirmax=1            #Number of simultaneous runs (1 to 50)
-cyclemax=9           #Number of cycles (0 to ????)
+dirmax=4            #Number of simultaneous runs (1 to 50)
+cyclemax=124           #Number of cycles (0 to ????)
 
 #####Directories of programs and utilities
 
 PLUMEPROG="/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/plume_wd"       #name and location of plumeria executable
 MAINDIR="/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria"                     #name and location of other utility programs
-METFILE="${MAINDIR}/scripts/input_files/gfs_sounding.txt"            #name and location of met. file
+#METFILE="${MAINDIR}/scripts/input_files/soundings/HTHH.txt"            #name and location of met. file
+METFILE="${MAINDIR}/scripts/input_files/soundings/gfs_sounding.txt"            #name and location of met. file
 MAKEINPUTPROG="${MAINDIR}/scripts/src/MakeInput"                     #name and location of MakeInput file
 OUTPUTREADER="${MAINDIR}/scripts/src/read_output.py"                 #name and location of python script that reads output
 OUTFILENAME="output_file.txt"                                        #name of output file created by plumeria (must agree with
@@ -44,7 +45,7 @@ RUNDIRS=${MAINDIR}/RunDirs                  #location of directories where progr
 ## NOTE FROM PAUL - HAVE REPLACED COMMENTED LINES WITH EDITS BELOW
 #OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 #OUTPUTDIR=${OUTFILEDIR}/H2O0.20_mg0.03     #location of output file directory
-OUTPUTDIR=${MAINDIR}/run_output/H2O0.20_mg0.03
+OUTPUTDIR=${MAINDIR}/run_output/H20/0_20
 OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 
 OUTLOGDIR=${OUTPUTDIR}/run_logs

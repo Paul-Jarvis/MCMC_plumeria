@@ -1,0 +1,9 @@
+# Gnuplot script to plot plume height as a function of MER for different water
+# contents
+
+set terminal png
+
+set output '/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/run_output/H20/H20.png'
+
+
+plot '/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/run_output/H20/0/summary_table/summary_table.txt' every ::2 u 10:11 w p
