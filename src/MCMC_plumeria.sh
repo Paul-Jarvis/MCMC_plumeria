@@ -45,7 +45,7 @@ RUNDIRS=${MAINDIR}/RunDirs                  #location of directories where progr
 ## NOTE FROM PAUL - HAVE REPLACED COMMENTED LINES WITH EDITS BELOW
 #OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 #OUTPUTDIR=${OUTFILEDIR}/H2O0.20_mg0.03     #location of output file directory
-OUTPUTDIR=${MAINDIR}/run_output/H20/0_20
+OUTPUTDIR=${MAINDIR}/run_output/fullSweep
 OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 
 OUTLOGDIR=${OUTPUTDIR}/run_logs

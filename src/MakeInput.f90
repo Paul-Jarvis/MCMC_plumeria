@@ -23,7 +23,7 @@
 
       !read input file to get date and time
       open(unit=12, &
-           file='/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/scripts/input_files/H20/0_20.txt', &
+           file='/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/scripts/input_files/fullSweep/input.txt', &
                   action='read')
       read(12,*)                                    !skip the first three lines
       read(12,*)
@@ -46,6 +46,7 @@
 !             '     rho_mix=',f6.3,' kg/m3')
 
       !Write input file
+      print *,T_m
 
       !Write inputs to screen
       write(6,2)  irun, MER, diam, u_exit, m_w, m_g, T_m
@@ -85,7 +86,7 @@
              '#',/, &
              '#   Magma properties',/, &
              '#',/, &
-             f4.0,'                 #magma temperature',/, &
+             f8.1,'                 #magma temperature',/, &
              f4.2,'                 #mass fraction gas in magma',/, &
              '1000.                #magma specific heat, J/kg K',/, &
              '2500.                #magma density (DRE), kg/m3')

@@ -18,7 +18,7 @@ import enthFunc
 
 ## Inputs
 pi                  = 3.14159               #pi
-nruns               = 501                   #number of runs to set parameters for (actually needs to be nruns +1)
+nruns               = 502                   #number of runs to set parameters for (actually needs to be nruns +1)
 vent_elevation      = 144                 #vent elevation, km - CMT FROM PAUL: I THINK THIS IS M ACTUALLY - although this isn't actually used
 logMER_min          = 5.5                    #minimum log MER (kg/s)
 logMER_max          = 10.5                  #maximum log MER (kg/s)
@@ -34,6 +34,8 @@ m_wMax = 0.2 #Maximum surface water mass fraction
 CpMag = 1000 #Specific heat of magma (J kg^-1 K)
 Twater = 273.15 #Temperature of external water mixed with magma at beginning
 p0 = 1.013e05 #Pressure at sea level (Pa)
+rho_m = 2500 #Denisty (DRE) of magma (kg m^-3)
+R_w = 8.314 / 0.0180015 #Gas constant for air (J kg-1 K-1)
 
 #Parameters that need to change if we're adjusting mass fraction water
 #Use this guide for the density of erupting mixture, assuming T=900 C, m_g=0.03, vent elevation=144 m
@@ -49,7 +51,7 @@ p0 = 1.013e05 #Pressure at sea level (Pa)
 #m_g     = 0.03                              #mass fraction gas
 outfile = "../input_files/fullSweep/input.txt"    #name of output file
 #rho_mix = 1.998                             #density of erupting mixture
-rho_mix = 1.998                             #density of erupting mixture
+#rho_mix = 1.998                             #density of erupting mixture
 # m_w     = 0.20                              #mass fraction water added
 
 ## Calculate the magma temperature
@@ -80,11 +82,12 @@ hmix = (1.0 - m_g - m_w) * magEnth + m_g * vapEnth + m_w * liqEnth
 Tmix = np.zeros_like(hmix)
 
 for i in range(0, nruns):
-    Tmix[i] = initT.findt_init(1.0 - m_g[i] - m_w[i], 0.0, m_w[i], hmix[i], p0, m_g[i], 0.0, 0.0)
-    exit()
+    Tmix[i] = initT.findt_init(1.0 - m_g[i] - m_w[i], 0.0, m_w[i] + m_g[i], hmix[i], p0, m_g[i], 0.0, 0.0)
 
-print(Tmix)
-exit()
+## Calculate the mixture density
+# print((m_g + m_w) * R_w * Tmix / p0)
+rho_mix = 1.0 / ((1.0 - m_g - m_w) / rho_m + (m_g + m_w) * R_w * Tmix / p0)
+
 ## Calculate the MER and eruption velocity
 logMER = logMER_min + (logMER_max-logMER_min) * \
               np.random.random_sample((nruns,))  #generate nruns of random numbers
@@ -114,9 +117,9 @@ print(   'run #         MER         diam     u_exit     T_m     m_w     m_g     
 print(   '             kg/s           m        m/s       C                        kg/m3')
 for irun in range(0,nruns-1):
     f.write('{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}\n'. \
-            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun],m_w[irun],m_g[irun],rho_mix))
+            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun] - 273.15, m_w[irun],m_g[irun],rho_mix[irun]))
     print( '{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}'. \
-            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun],m_w[irun],m_g[irun],rho_mix))
+            format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun] - 273.15,m_w[irun],m_g[irun],rho_mix[irun]))
     #    print('%5d   %12.4e%10.0f%11.1f    %4.0f    %4.2f    %4.2f   %5.3f' \
     #           % (irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix)
 f.close()
