@@ -1,3 +1,4 @@
 *.txt
 src/MakeInput
 *.inp
+*.so
