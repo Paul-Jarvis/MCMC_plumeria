@@ -1,0 +1,20 @@
+# Gnuplot script to plot plume height as a function of MER for different water
+# contents
+
+set terminal pngcairo enhanced
+
+set output '/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/run_output/fullSweep/fullSweep.png'
+
+unset key
+
+set xrange [1e5:1e11]
+set yrange [0:*]
+
+set xlabel 'Solid MER /kg s^{-1}'
+set ylabel 'Plume height /km'
+
+set xtics("10^{5}" 1e5, "10^{6}" 1e6, "10^{7}" 1e7, "10^{8}" 1e8, "10^{9}" 1e9, "10^{10}" 1e10, "10^{11}" 1e11)
+
+set logscale x
+
+plot '/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/run_output/fullSweep/summary_table/summary_table.txt' every ::2 u 10:11 w p lc 0 notitle  

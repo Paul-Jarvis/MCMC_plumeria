@@ -23,7 +23,7 @@
 
       !read input file to get date and time
       open(unit=12, &
-           file='/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/scripts/input_files/fullSweep/input.txt', &
+           file='/home/paulj/Documents/tonga2022/plumeModeling/MCMC_plumeria/scripts/input_files/fullSweep5000/input.txt', &
                   action='read')
       read(12,*)                                    !skip the first three lines
       read(12,*)

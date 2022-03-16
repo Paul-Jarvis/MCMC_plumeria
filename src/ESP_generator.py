@@ -18,7 +18,7 @@ import enthFunc
 
 ## Inputs
 pi                  = 3.14159               #pi
-nruns               = 502                   #number of runs to set parameters for (actually needs to be nruns +1)
+nruns               = 5002                   #number of runs to set parameters for (actually needs to be nruns +1)
 vent_elevation      = 144                 #vent elevation, km - CMT FROM PAUL: I THINK THIS IS M ACTUALLY - although this isn't actually used
 logMER_min          = 5.5                    #minimum log MER (kg/s)
 logMER_max          = 10.5                  #maximum log MER (kg/s)
@@ -49,7 +49,7 @@ R_w = 8.314 / 0.0180015 #Gas constant for air (J kg-1 K-1)
 
 #T_m     = 900.                              #magma temperature
 #m_g     = 0.03                              #mass fraction gas
-outfile = "../input_files/fullSweep/input.txt"    #name of output file
+outfile = "../input_files/fullSweep5000/input.txt"    #name of output file
 #rho_mix = 1.998                             #density of erupting mixture
 #rho_mix = 1.998                             #density of erupting mixture
 # m_w     = 0.20                              #mass fraction water added
@@ -98,6 +98,10 @@ u_exit = u_min + (u_max-u_min)*np.random.random_sample((nruns,))
 ## Calculate vent cross-sectional area
 xs_area = MER/(u_exit*rho_mix)
 d_vent = 2*np.sqrt(xs_area/pi)
+
+## Convert temperatures to C
+Tmin = Tmin - 273.15
+Tmax = Tmax - 273.15
 
 ## Write out table header
 f = open(outfile, "w")

@@ -24,7 +24,7 @@
 #Runs are numbered from RunStartNumber to (RunStartNumber + dirmax*(cyclemax+1))
 RunStartNumber=1     #Run number for first run in the series
 dirmax=4            #Number of simultaneous runs (1 to 50)
-cyclemax=124           #Number of cycles (0 to ????)
+cyclemax=1249           #Number of cycles (0 to ????)
 
 #####Directories of programs and utilities
 
@@ -45,7 +45,7 @@ RUNDIRS=${MAINDIR}/RunDirs                  #location of directories where progr
 ## NOTE FROM PAUL - HAVE REPLACED COMMENTED LINES WITH EDITS BELOW
 #OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 #OUTPUTDIR=${OUTFILEDIR}/H2O0.20_mg0.03     #location of output file directory
-OUTPUTDIR=${MAINDIR}/run_output/fullSweep
+OUTPUTDIR=${MAINDIR}/run_output/fullSweep5000
 OUTFILEDIR=${OUTPUTDIR}/output_files                                    #Name and location of subdirectories in ${OUTFILEDIR}
 
 OUTLOGDIR=${OUTPUTDIR}/run_logs
@@ -222,8 +222,9 @@ for (( icycle=0;icycle<=$cyclemax;icycle++ )); do
          python3.6 ${OUTPUTREADER} ${RunNumber} ${SUMMARYTABLE}
 
          #move the log & output files
-         cp -f ${LOGFILENAME} ${OUTLOGDIR}/Run${RunNumber}.txt
-         cp -f ${OUTFILENAME} ${OUTFILEDIR}/Run${RunNumber}.txt
+	 #In event of very large number of sims, comment out these lines
+         #cp -f ${LOGFILENAME} ${OUTLOGDIR}/Run${RunNumber}.txt
+         #cp -f ${OUTFILENAME} ${OUTFILEDIR}/Run${RunNumber}.txt
 
          echo "     all done with plumeria run ${RunNumber}"
    done
