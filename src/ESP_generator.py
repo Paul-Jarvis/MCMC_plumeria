@@ -1,58 +1,66 @@
 #Script that generates ESP's for MCMC simulations
 
+## Import required modules
 import sys
 import numpy as np
 import numpy.f2py
 import datetime
 import math
 
-with open('/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/FindT_init.f90', 'r') as fid:
+## Create wrappers for parts of Fortran Plumeria code such that they can be#####
+## loaded as Python modules ####################################################
+
+#EDIT THIS VARIABLE TO STORE PATH TO PLUMERIA SOURCE CODE
+plumeriaSrc = '/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd'
+
+initTfile = plumeriaSrc + '/FindT_init.f90'
+initTargs = '-I' + plumeriaSrc + ' ' + plumeriaSrc + '/enthfunctions.o' + ' ' + \
+    plumeriaSrc + '/zfunctions.o' + ' ' + plumeriaSrc + '/Module1.o'
+with open(initTfile, 'r') as fid:
     source = fid.read()
-np.f2py.compile(source, modulename='initT', extension='.f90', extra_args = '-I/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd /home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/enthfunctions.o /home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/zfunctions.o /home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/Module1.o')
+np.f2py.compile(source, modulename='initT', extension='.f90', \
+                extra_args = initTargs)
 import initT
 
-with open('/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/enthSubroutines.f90', 'r') as fid:
+enthFuncFile = plumeriaSrc + '/enthSubroutines.f90'
+enthFuncArgs = '-I' + plumeriaSrc + ' ' + plumeriaSrc + '/zfunctions.o' + ' ' + \
+    plumeriaSrc + '/Module1.o'
+with open(enthFuncFile, 'r') as fid:
     source2 = fid.read()
-np.f2py.compile(source2, modulename='enthFunc', extension='.f90', extra_args = '-I/home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd /home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/zfunctions.o /home/paulj/Documents/tonga2022/plumeModeling/plumeria_wd/Module1.o')
+np.f2py.compile(source2, modulename='enthFunc', extension='.f90', \
+                extra_args = enthFuncArgs)
 import enthFunc
 
-## Inputs
-pi                  = 3.14159               #pi
-nruns               = 5002                   #number of runs to set parameters for (actually needs to be nruns +1)
-vent_elevation      = 144                 #vent elevation, km - CMT FROM PAUL: I THINK THIS IS M ACTUALLY - although this isn't actually used
-logMER_min          = 5.5                    #minimum log MER (kg/s)
-logMER_max          = 10.5                  #maximum log MER (kg/s)
-u_min               = 100.0                  #minimum ejection velocity (m/s)
-u_max               = 350.0                  #maximum ejection velocity (m/s)
+## Name of output file (including path) ########################################
+outfile = "../input_files/fullSweep5000/input.txt"    #name of output file
+
+## Inputs - fixed###############################################################
+pi             = 3.14159           #pi
+nruns          = 5002              #number of runs to set parameters for
+                                   #(actually needs to be nruns +1)
+vent_elevation = 144               #vent elevation, m
+CpMag          = 1000              #Specific heat of magma (J kg^-1 K)
+Twater         = 273.15            #Temperature of external water mixed with
+                                   #magma at beginning
+p0             = 1.013e05          #Pressure at sea level (Pa)
+rho_m          = 2500              #Denisty (DRE) of magma (kg m^-3)
+R_w            = 8.314 / 0.0180015 #Gas constant for air (J kg-1 K-1)
+
+## Ranges of inputs which are sampled###########################################
+logMER_min = 5.5  #minimum log MER (kg/s)
+logMER_max = 10.5 #maximum log MER (kg/s)
+
+u_min = 100.0 #minimum ejection velocity (m/s)
+u_max = 350.0 #maximum ejection velocity (m/s)
 
 Tmin = 1073 #Minimum magma temperature (K)
 Tmax = 1473 #Maximum magma temperature (K)
+
 m_gMin = 0.01 #Minimum magmatic gas fraction
 m_gMax = 0.05 #Maximum magmatic gas fraction
+
 m_wMin = 0.0 #Minimum surface water mass fraction
 m_wMax = 0.2 #Maximum surface water mass fraction
-CpMag = 1000 #Specific heat of magma (J kg^-1 K)
-Twater = 273.15 #Temperature of external water mixed with magma at beginning
-p0 = 1.013e05 #Pressure at sea level (Pa)
-rho_m = 2500 #Denisty (DRE) of magma (kg m^-3)
-R_w = 8.314 / 0.0180015 #Gas constant for air (J kg-1 K-1)
-
-#Parameters that need to change if we're adjusting mass fraction water
-#Use this guide for the density of erupting mixture, assuming T=900 C, m_g=0.03, vent elevation=144 m
-#m_w     0    0.05     0.1    0.20       m_w
-#    5.948   2.774   2.108   1.998       rho_mix (kg/m3) - Should the first number be 2.948?
-#    144.0   210.9   241.9   248.5       sound speed (m/s)
-#. . .  assuming T=900 C, m_w=0.00, vent elevation=144 m
-#m_g  0.03    0.10    0.20    0.50    0.70    0.90    m_g
-#    5.948   1.814   0.909   0.364    0.260   0.202   rho_mix (kg/m3) - Should the first number be 2.948?
-#    144.0   260.8   368.5   582.2    688.8   781.1   sound speed (m/s)
-
-#T_m     = 900.                              #magma temperature
-#m_g     = 0.03                              #mass fraction gas
-outfile = "../input_files/fullSweep5000/input.txt"    #name of output file
-#rho_mix = 1.998                             #density of erupting mixture
-#rho_mix = 1.998                             #density of erupting mixture
-# m_w     = 0.20                              #mass fraction water added
 
 ## Calculate the magma temperature
 T_m = Tmin + (Tmax - Tmin) * np.random.random_sample((nruns,))
@@ -105,16 +113,6 @@ Tmax = Tmax - 273.15
 
 ## Write out table header
 f = open(outfile, "w")
-#f.write('INPUT VALUES USED IN HTHH PLUMERIA RUNS. T=%5.1f, m_w=%4.2f, m_g=%4.2f, rho_mix=%5.3f' \
-#           % T_m, m_w, m_g, rho_mix)
-#f.write('INPUT VALUES USED IN HTHH PLUMERIA RUNS. T={:5.1f}, m_w={:4.2f}, m_g={:4.2f}, rho_mix={:5.3f}\n'.format( \
-#           T_m, m_w, m_g, rho_mix))
-#print('INPUT VALUES USED IN HTHH PLUMERIA RUNS. T={:5.1f}, m_w={:4.2f}, m_g={:4.2f}, rho_mix={:5.3f}'.format( \
-#           T_m, m_w, m_g, rho_mix))
-
-#Write out results
-#        0        10        20        30        40        50        60        70
-#        12345678901234567890123456789012345678901234567890123456789012345678901234567890
 f.write('run #         MER         diam     u_exit     T_m     m_w     m_g     rho_mix\n')
 f.write('             kg/s           m        m/s       C                        kg/m3\n')
 print(   'run #         MER         diam     u_exit     T_m     m_w     m_g     rho_mix')
@@ -124,7 +122,5 @@ for irun in range(0,nruns-1):
             format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun] - 273.15, m_w[irun],m_g[irun],rho_mix[irun]))
     print( '{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}'. \
             format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun] - 273.15,m_w[irun],m_g[irun],rho_mix[irun]))
-    #    print('%5d   %12.4e%10.0f%11.1f    %4.0f    %4.2f    %4.2f   %5.3f' \
-    #           % (irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m,m_w,m_g,rho_mix)
 f.close()
 
