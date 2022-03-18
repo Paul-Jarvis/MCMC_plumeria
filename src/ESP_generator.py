@@ -62,6 +62,8 @@ m_gMax = 0.05 #Maximum magmatic gas fraction
 m_wMin = 0.0 #Minimum surface water mass fraction
 m_wMax = 0.2 #Maximum surface water mass fraction
 
+## END OF USER INPUTS #########################################################
+
 ## Calculate the magma temperature
 T_m = Tmin + (Tmax - Tmin) * np.random.random_sample((nruns,))
 
@@ -86,20 +88,18 @@ liqEnth = enthFunc.findh_a(Twater)
 hmix = (1.0 - m_g - m_w) * magEnth + m_g * vapEnth + m_w * liqEnth
 
 ## Calculate the mixture temperature
-#print(initT.findt_init.__doc__)
 Tmix = np.zeros_like(hmix)
 
 for i in range(0, nruns):
-    Tmix[i] = initT.findt_init(1.0 - m_g[i] - m_w[i], 0.0, m_w[i] + m_g[i], hmix[i], p0, m_g[i], 0.0, 0.0)
+    Tmix[i] = initT.findt_init(1.0 - m_g[i] - m_w[i], 0.0, m_w[i] + m_g[i], \
+                               hmix[i], p0, m_g[i], 0.0, 0.0)
 
 ## Calculate the mixture density
-# print((m_g + m_w) * R_w * Tmix / p0)
 rho_mix = 1.0 / ((1.0 - m_g - m_w) / rho_m + (m_g + m_w) * R_w * Tmix / p0)
 
 ## Calculate the MER and eruption velocity
 logMER = logMER_min + (logMER_max-logMER_min) * \
-              np.random.random_sample((nruns,))  #generate nruns of random numbers
-#logMER = np.array([6.0,6.5,7.0,7.5,8.0,8.5,9.0])
+              np.random.random_sample((nruns,)) #generate nruns of random numbers
 MER = np.exp(np.log(10)*logMER)
 u_exit = u_min + (u_max-u_min)*np.random.random_sample((nruns,))
 
@@ -123,4 +123,3 @@ for irun in range(0,nruns-1):
     print( '{:5d}   {:12.4e}{:10.0f}{:11.1f}    {:4.0f}    {:4.2f}    {:4.2f}      {:5.3f}'. \
             format(irun+1,MER[irun],d_vent[irun],u_exit[irun],T_m[irun] - 273.15,m_w[irun],m_g[irun],rho_mix[irun]))
 f.close()
-
